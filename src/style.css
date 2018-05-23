@@ -1,0 +1,7 @@
+.my-colors{
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: red;
+    border: #989898 solid 1px;
+}
