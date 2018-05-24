@@ -1,5 +1,5 @@
 export default {
-    books: { books: [], error: null },
+    books: [],
     colors: [],
     session: !!sessionStorage.jwt
 };

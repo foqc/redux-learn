@@ -12,7 +12,7 @@ export function loadBooks() {
             dispatch(loadBooksSuccess(books));
         }).catch(error => {
             //throw (error);
-            dispatch({ type: 'LOAD_BOOKS_ERROR', books: [], error });
+            dispatch({ type: 'LOAD_BOOKS_FAILURE', error });
         });
     };
 }

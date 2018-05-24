@@ -189,8 +189,8 @@ function mapStateToProps(state, ownProps) {
     let checkBoxColors = [];
     const bookId = ownProps.match.params.id;
 
-    if (bookId && state.books.books.length > 0 && state.colors.length > 0) {
-        book = getBookById(state.books.books, bookId);
+    if (bookId && state.books.length > 0 && state.colors.length > 0) {
+        book = getBookById(state.books, bookId);
         if (book.id && book.color_ids.length > 0) {
             checkBoxColors = colorsForCheckBoxes(stateColors, book);
             bookColors = collectBookColors(stateColors, book);

@@ -5,7 +5,7 @@ import history from "../history";
 export default function bookReducer(state = initialState.books, action) {
   switch (action.type) {
     case types.LOAD_BOOKS_SUCCESS:
-      return { ...state, books: action.books };
+      return action.books;
     case types.CREATE_BOOK_SUCCESS:
       //history.push(`/books/${action.book.id}`);
       return [
@@ -27,13 +27,6 @@ export default function bookReducer(state = initialState.books, action) {
       return [
         ...state.filter(book => book.id !== action.book.id)
       ];
-    }
-    case "LOAD_BOOKS_ERROR": {
-      return {
-        ...state,
-        books: action.books,
-        error: action.error
-      };
     }
     default:
       return state;

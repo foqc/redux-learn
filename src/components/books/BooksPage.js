@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import BookList from '../books/BookList';
 import BookPage from '../books/BookPage';
 import NewBookPage from '../books/NewBookPage';
+import { createErrorSelector } from '../../actions/selectors';
 
 class BooksPage extends React.Component {
   render() {
@@ -28,19 +29,18 @@ class BooksPage extends React.Component {
     );
   }
 }
-
+const errorSelector = createErrorSelector(['LOAD_BOOKS']);
 function mapStateToProps(state, ownProps) {
   return {
-    books: state.books.books,
+    books: state.books,
     match: ownProps.match,
-    error: state.books.error
+    error: errorSelector(state)
   };
 }
 
 BooksPage.propTypes = {
   books: PropTypes.array,
-  match: PropTypes.object.isRequired,
-  error: PropTypes.object
+  match: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps)(BooksPage);

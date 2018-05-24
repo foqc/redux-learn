@@ -19,8 +19,7 @@ const BookList = ({ books, match, error }) => {
 
 BookList.propTypes = {
     books: PropTypes.array,
-    match: PropTypes.object.isRequired,
-    error: PropTypes.object,
+    match: PropTypes.object.isRequired
 };
 
 export default BookList;  
