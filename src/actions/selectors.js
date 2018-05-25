@@ -1,8 +1,10 @@
-import _ from 'lodash';
-
-export const createErrorSelector = (actions) => (state) => {
-    return _(actions)
-        .map((action) => _.get(state, `error.${action}`))
-        .compact()
-        .first() || '';
+export const createErrorSelector = actions => (state) => {
+    const errors = actions.map(action => state.error[action]);
+    if (errors && errors[0]) {
+        return errors[0];
+    }
+    return '';
 };
+
+export const createLoadingSelector = actions => state =>
+    actions.some(action => state.loading[action]);
