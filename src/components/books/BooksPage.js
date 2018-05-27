@@ -41,7 +41,11 @@ function mapStateToProps(state, ownProps) {
 BooksPage.propTypes = {
   books: PropTypes.array,
   match: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ])
 };
 
 export default connect(mapStateToProps)(BooksPage);

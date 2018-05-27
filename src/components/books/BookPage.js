@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 import ColorList from '../books/ColorList';
 import BookForm from '../books/BookForm';
 import * as bookActions from '../../actions/bookActions';
+import LoadErrorHandler from '../error/ErrorComponent';
+import { createErrorSelector, createLoadingSelector } from '../../actions/selectors';
 
 class BookPage extends React.Component {
     constructor(props) {
@@ -117,27 +119,29 @@ class BookPage extends React.Component {
             );
         }
         return (
-            <div className="col-md-8 col-md-offset-2">
-                <div className="row" >
-                    <div className="col-md-8">
-                        <h3>Details</h3>
-                        <h5>{this.props.book.id}.- {this.props.book.title}</h5>
-                        <p>Subtitle: {this.props.book.subtitle}</p>
-                        <p>Author: {this.props.book.author}</p>
-                        <p>Published: {this.props.book.published}</p>
-                        <div className="txtn">
-                            <ColorList colors={this.props.bookColors} />
+            <LoadErrorHandler showError={this.props.error} loading={this.props.loading}>
+                <div className="col-md-8 col-md-offset-2">
+                    <div className="row" >
+                        <div className="col-md-8">
+                            <h3>Details</h3>
+                            <h5>{this.props.book.id}.- {this.props.book.title}</h5>
+                            <p>Subtitle: {this.props.book.subtitle}</p>
+                            <p>Author: {this.props.book.author}</p>
+                            <p>Published: {this.props.book.published}</p>
+                            <div className="txtn">
+                                <ColorList colors={this.props.bookColors} />
+                            </div>
+                            <button className="btn btn-success" onClick={this.toggleEdit}>Edit</button>
+                            <button className="btn btn-danger" onClick={this.deleteBook}>Delete</button>
                         </div>
-                        <button className="btn btn-success" onClick={this.toggleEdit}>Edit</button>
-                        <button className="btn btn-danger" onClick={this.deleteBook}>Delete</button>
-                    </div>
-                    <div className="col-md-4"><div className="text-center">
-                        <img src={this.props.book.cover} className="rounded"
-                            alt={this.props.book.subtitle} width="200" height="300" />
-                    </div>
+                        <div className="col-md-4"><div className="text-center">
+                            <img src={this.props.book.cover} className="rounded"
+                                alt={this.props.book.subtitle} width="200" height="300" />
+                        </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </LoadErrorHandler>
         );
     }
 }
@@ -146,7 +150,12 @@ BookPage.propTypes = {
     book: PropTypes.object.isRequired,
     bookColors: PropTypes.array.isRequired,
     checkBoxColors: PropTypes.array.isRequired,
-    actions: PropTypes.object.isRequired
+    actions: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object
+    ])
 };
 
 function colorsForCheckBoxes(colors, book = null) {
@@ -177,6 +186,8 @@ function getBookById(books, id) {
     return book;
 }
 
+const errorSelector = createErrorSelector(['LOAD_BOOKS', 'LOAD_COLORS']);
+const loadingSelector = createLoadingSelector(['LOAD_BOOKS', 'LOAD_COLORS']);
 
 function mapStateToProps(state, ownProps) {
     let book = {
@@ -198,7 +209,11 @@ function mapStateToProps(state, ownProps) {
             checkBoxColors = colorsForCheckBoxes(stateColors, book);
         }
     }
-    return { book: book, checkBoxColors: checkBoxColors, bookColors: bookColors };
+    return {
+        book: book, checkBoxColors: checkBoxColors, bookColors: bookColors,
+        error: errorSelector(state),
+        loading: loadingSelector(state)
+    };
 }
 
 function mapDispatchToProps(dispatch) {
