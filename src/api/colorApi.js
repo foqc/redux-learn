@@ -7,9 +7,9 @@ class ColorApi {
     static handleErrors(response) {
         if (!response.ok) {
             if (response.status === 404) {
-                throw Error("Error 404, Not Found Resource");
+                throw Error(response.statusText || "Error 404, Not Found Resource: " + response.url);
             } else {
-                throw Error(response.statusText || "Something went wrong!");
+                throw Error(response.statusText || "Something went wrong!" + response.url);
             }
         }
         return response;

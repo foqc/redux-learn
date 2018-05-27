@@ -7,6 +7,7 @@ import BookForm from '../books/BookForm';
 import * as bookActions from '../../actions/bookActions';
 import LoadErrorHandler from '../error/ErrorComponent';
 import { createErrorSelector, createLoadingSelector } from '../../actions/selectors';
+import isEmpty from '../../util/util';
 
 class BookPage extends React.Component {
     constructor(props) {
@@ -100,6 +101,17 @@ class BookPage extends React.Component {
 
 
     render() {
+        if (!this.state.book.id) {
+            return (
+                <div className="col-md-8">
+                    <LoadErrorHandler showError={this.props.error} loading={this.props.loading}>
+                        <div className="alert alert-info" role="alert">
+                            There is not a book with this ID!
+                        </div>
+                    </LoadErrorHandler>
+                </div>
+            );
+        }
         if (this.state.isEditing) {
             return (
                 <div className="col-md-8 col-md-offset-2">
@@ -119,8 +131,8 @@ class BookPage extends React.Component {
             );
         }
         return (
-            <LoadErrorHandler showError={this.props.error} loading={this.props.loading}>
-                <div className="col-md-8 col-md-offset-2">
+            <div className="col-md-8 col-md-offset-2">
+                <LoadErrorHandler showError={this.props.error} loading={this.props.loading}>
                     <div className="row" >
                         <div className="col-md-8">
                             <h3>Details</h3>
@@ -131,7 +143,7 @@ class BookPage extends React.Component {
                             <div className="txtn">
                                 <ColorList colors={this.props.bookColors} />
                             </div>
-                            <button className="btn btn-success" onClick={this.toggleEdit}>Edit</button>
+                            <button className="btn btn-success" onClick={this.toggleEdit}>Edit</button>{" "}
                             <button className="btn btn-danger" onClick={this.deleteBook}>Delete</button>
                         </div>
                         <div className="col-md-4"><div className="text-center">
@@ -140,8 +152,8 @@ class BookPage extends React.Component {
                         </div>
                         </div>
                     </div>
-                </div>
-            </LoadErrorHandler>
+                </LoadErrorHandler>
+            </div>
         );
     }
 }
@@ -182,7 +194,7 @@ function collectBookColors(colors, book) {
 }
 
 function getBookById(books, id) {
-    let book = { ...books.find(book => book.id == id) };
+    let book = Object.assign({}, books.find(book => book.id == id));
     return book;
 }
 
@@ -202,11 +214,13 @@ function mapStateToProps(state, ownProps) {
 
     if (bookId && state.books.length > 0 && state.colors.length > 0) {
         book = getBookById(state.books, bookId);
-        if (book.id && book.color_ids.length > 0) {
-            checkBoxColors = colorsForCheckBoxes(stateColors, book);
-            bookColors = collectBookColors(stateColors, book);
-        } else {
-            checkBoxColors = colorsForCheckBoxes(stateColors, book);
+        if (!isEmpty(book)) {
+            if (book.id && book.color_ids.length > 0) {
+                checkBoxColors = colorsForCheckBoxes(stateColors, book);
+                bookColors = collectBookColors(stateColors, book);
+            } else {
+                checkBoxColors = colorsForCheckBoxes(stateColors, book);
+            }
         }
     }
     return {

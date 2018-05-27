@@ -11,8 +11,10 @@ import history from "./history";
 
 const store = configureStore();
 
-store.dispatch(loadBooks());
-store.dispatch(loadColors());
+if (sessionStorage.jwt) {
+    store.dispatch(loadBooks());
+    store.dispatch(loadColors());
+}
 
 ReactDOM.render(
     <Router history={history}>

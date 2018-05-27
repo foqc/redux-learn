@@ -15,6 +15,6 @@ function withErrorHandling(WrappedComponent) {
     };
 }
 
-const LoadErrorHandler = withErrorHandling(({ children }) => <div>{children}</div>);
+const LoadErrorHandler = withErrorHandling(({ children }) => children);
 
 export default LoadErrorHandler;
