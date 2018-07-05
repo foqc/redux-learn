@@ -6,8 +6,14 @@ import BookList from '../books/BookList';
 import BookPage from '../books/BookPage';
 import NewBookPage from '../books/NewBookPage';
 import { createErrorSelector, createLoadingSelector } from '../../actions/selectors';
+import { loadBooks } from '../../actions/bookActions';
+import { loadColors } from '../../actions/colorActions';
 
 class BooksPage extends React.Component {
+  componentDidMount() {
+    this.props.dispatch(loadBooks());
+    this.props.dispatch(loadColors());
+  }
   render() {
     const { books, match, error, loading } = this.props;
     return (

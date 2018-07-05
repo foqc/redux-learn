@@ -1,3 +1,4 @@
+/* eslint eqeqeq: "off" */
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -27,7 +28,7 @@ class BookPage extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.book.id != nextProps.book.id) {
+        if (this.props.book._id != nextProps.book._id) {
             this.setState({ book: nextProps.book });
         }
         if (this.props.checkBoxColors.length < nextProps.checkBoxColors.length) {
@@ -41,42 +42,21 @@ class BookPage extends React.Component {
         this.setState({ isEditing: !this.state.isEditing });
     }
 
-    /*updateBookState(event) {
-        const field = event.target.name;
-        const book = this.state.book;
-        book[field] = event.target.value;
-        return this.setState({ book: book });
-    }*/
-
     updateBookState = e =>
         this.setState({
             book: { ...this.state.book, [e.target.name]: e.target.value }
         });
 
-    /*updateBookColors(event) {
-        const book = this.state.book;
-        const colorId = event.target.value;
-        const color = this.state.checkBoxColors.filter(color => color.id == colorId)[0];
-        const checked = !color.checked;
-        color['checked'] = checked;
-        if (checked) {
-            book.color_ids.push(color.id);
-        } else {
-            book.color_ids.splice(book.color_ids.indexOf(color.id),1);
-        }
-        this.setState({ book: book });
-    }*/
-
     updateBookColors = e => {
         const colorId = e.target.value;
-        const color = this.state.checkBoxColors.filter(color => color.id == colorId)[0];
+        const color = this.state.checkBoxColors.filter(color => color._id == colorId)[0];
         const checked = !color.checked;
         color['checked'] = checked;
         if (checked) {
             this.setState({
                 book: {
                     ...this.state.book,
-                    "color_ids": [...this.state.book.color_ids, color.id]
+                    "color_ids": [...this.state.book.color_ids, color._id]
                 }
             });
         } else {
@@ -84,7 +64,7 @@ class BookPage extends React.Component {
                 book: {
                     ...this.state.book,
                     "color_ids":
-                        [...this.state.book.color_ids.filter(item => item != color.id)]
+                        [...this.state.book.color_ids.filter(item => item != color._id)]
                 }
             });
         }
@@ -101,7 +81,8 @@ class BookPage extends React.Component {
 
 
     render() {
-        if (!this.state.book.id) {
+        //console.log(this.state.book)
+        if (!this.state.book._id) {
             return (
                 <div className="col-md-8">
                     <LoadErrorHandler showError={this.props.error} loading={this.props.loading}>
@@ -136,7 +117,7 @@ class BookPage extends React.Component {
                     <div className="row" >
                         <div className="col-md-8">
                             <h3>Details</h3>
-                            <h5>{this.props.book.id}.- {this.props.book.title}</h5>
+                            <h5>{this.props.book.title}</h5>
                             <p>Subtitle: {this.props.book.subtitle}</p>
                             <p>Author: {this.props.book.author}</p>
                             <p>Published: {this.props.book.published}</p>
@@ -172,7 +153,7 @@ BookPage.propTypes = {
 
 function colorsForCheckBoxes(colors, book = null) {
     return colors.map(color => {
-        if (book && book.color_ids.filter(colorId => colorId == color.id).length > 0) {
+        if (book && book.color_ids.filter(colorId => colorId == color._id).length > 0) {
             color['checked'] = true;
         } else {
             color['checked'] = false;
@@ -184,7 +165,7 @@ function colorsForCheckBoxes(colors, book = null) {
 function collectBookColors(colors, book) {
     let selected = colors.map(color => {
         let colorChoose;
-        if (book.color_ids.filter(colorId => colorId == color.id).length > 0) {
+        if (book.color_ids.filter(colorId => colorId == color._id).length > 0) {
             colorChoose = color;
         }
         return colorChoose;
@@ -194,7 +175,7 @@ function collectBookColors(colors, book) {
 }
 
 function getBookById(books, id) {
-    let book = Object.assign({}, books.find(book => book.id == id));
+    let book = Object.assign({}, books.find(book => book._id == id));
     return book;
 }
 
@@ -203,7 +184,7 @@ const loadingSelector = createLoadingSelector(['LOAD_BOOKS', 'LOAD_COLORS']);
 
 function mapStateToProps(state, ownProps) {
     let book = {
-        id: 0, isbn: '', title: '', subtitle: '', author: '', published: '',
+        isbn: '', title: '', subtitle: '', author: '', published: '',
         publisher: '', pages: '', description: '', website: '', cover: '',
         color_ids: []
     };
@@ -211,11 +192,10 @@ function mapStateToProps(state, ownProps) {
     let bookColors = [];
     let checkBoxColors = [];
     const bookId = ownProps.match.params.id;
-
     if (bookId && state.books.length > 0 && state.colors.length > 0) {
         book = getBookById(state.books, bookId);
         if (!isEmpty(book)) {
-            if (book.id && book.color_ids.length > 0) {
+            if (book._id && book.color_ids.length > 0) {
                 checkBoxColors = colorsForCheckBoxes(stateColors, book);
                 bookColors = collectBookColors(stateColors, book);
             } else {

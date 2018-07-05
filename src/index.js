@@ -10,12 +10,6 @@ import { loadColors } from '../src/actions/colorActions';
 import history from "./history";
 
 const store = configureStore();
-
-if (sessionStorage.jwt) {
-    store.dispatch(loadBooks());
-    store.dispatch(loadColors());
-}
-
 ReactDOM.render(
     <Router history={history}>
         <Provider store={store}>

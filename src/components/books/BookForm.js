@@ -16,7 +16,7 @@ class BookForm extends React.Component {
                     item={color}
                     styleClass="form-check form-check-inline"
                     handleChange={this.props.onColorChange}
-                    key={color.id} />
+                    key={color._id} />
             );
         });
     }

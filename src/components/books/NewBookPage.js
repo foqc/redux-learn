@@ -1,3 +1,4 @@
+/* eslint eqeqeq: "off" */
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -11,7 +12,6 @@ class NewBookPage extends React.Component {
         this.state = {
             saving: false,
             book: {
-                id: Math.trunc(Math.random() * (100 - 12) + 12),
                 isbn: '', title: '', subtitle: '', author: '', published: '',
                 publisher: '', pages: '', description: '', website: '', cover: '',
                 color_ids: []
@@ -29,14 +29,14 @@ class NewBookPage extends React.Component {
 
     updateBookColors = e => {
         const colorId = e.target.value;
-        const color = this.props.checkBoxColors.filter(color => color.id == colorId)[0];
+        const color = this.props.checkBoxColors.filter(color => color._id == colorId)[0];
         const checked = !color.checked;
         color['checked'] = checked;
         if (checked) {
             this.setState({
                 book: {
                     ...this.state.book,
-                    "color_ids": [...this.state.book.color_ids, color.id]
+                    "color_ids": [...this.state.book.color_ids, color._id]
                 }
             });
         } else {
@@ -44,7 +44,7 @@ class NewBookPage extends React.Component {
                 book: {
                     ...this.state.book,
                     "color_ids":
-                        [...this.state.book.color_ids.filter(item => item != color.id)]
+                        [...this.state.book.color_ids.filter(item => item != color._id)]
                 }
             });
         }

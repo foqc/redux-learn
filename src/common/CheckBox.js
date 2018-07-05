@@ -9,12 +9,12 @@ class CheckBox extends React.Component {
                     className="form-check-input"
                     type="checkbox"
                     name={this.props.item.name}
-                    value={this.props.item.id}
+                    value={this.props.item._id}
                     checked={this.props.item.checked}
                     onChange={this.props.handleChange} />
                 <label
                     className="form-check-label"
-                    htmlFor={this.props.item.name}>{this.props.item.id}-{this.props.item.name}</label>
+                    htmlFor={this.props.item.name}>{this.props.item.name}</label>
             </div>
         );
     }

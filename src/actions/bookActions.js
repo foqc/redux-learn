@@ -58,7 +58,7 @@ export function createBookSuccess(book) {
 
 export function deleteBook(book) {
     return function (dispatch) {
-        return bookApi.deleteBook(book).then(() => {
+        return bookApi.deleteBook(book).then((response) => {
             dispatch(deleteBookSuccess(book));
             return;
         }).catch(error => {

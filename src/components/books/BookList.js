@@ -4,13 +4,12 @@ import { NavLink } from 'react-router-dom';
 import LoadErrorHandler from '../error/ErrorComponent';
 
 const BookList = ({ books, match, error, loading }) => {
-
     return (
         <LoadErrorHandler showError={error} loading={loading}>
             <ul className="list-group">
-                {books.map(book =>
-                    (<li className="list-group-item" key={book.id}>
-                        <NavLink to={`${match.url}/${book.id}`} activeClassName="active">{book.author}</NavLink>
+                { books.map(book =>
+                    (<li className="list-group-item" key={book._id}>
+                        <NavLink to={`${match.url}/${book._id}`} activeClassName="active">{book.author}</NavLink>
                     </li>)
                 )}
             </ul>
