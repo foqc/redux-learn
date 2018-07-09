@@ -1,6 +1,6 @@
 import axios from "axios";
 import authHeader from '../api/authHeader';
-
+import errorAPIMessage from '../api/ErrorApiMessage';
 class BookApi {
 
     static getAllBooks() {
@@ -8,7 +8,7 @@ class BookApi {
         return axios.get("/books", { headers }).then(res =>
             res.data
         ).catch(error => {
-            throw (error);
+            throw (errorAPIMessage(error));
         });
     }
 
@@ -24,7 +24,7 @@ class BookApi {
         }).then(res =>
             res.data
         ).catch(error => {
-            throw (error);
+            throw (errorAPIMessage(error));
         });
     }
 
@@ -40,7 +40,7 @@ class BookApi {
         }).then(res =>
             res.data
         ).catch(error => {
-            throw (error);
+            throw (errorAPIMessage(error));
         });
     }
 
@@ -56,7 +56,7 @@ class BookApi {
         }).then(res =>
             res.data
         ).catch(error => {
-            throw (error);
+            throw (errorAPIMessage(error));
         });
     }
 }

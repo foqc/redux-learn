@@ -1,5 +1,6 @@
 import axios from 'axios';
 import authHeader from '../api/authHeader';
+import errorAPIMessage from '../api/ErrorApiMessage';
 
 class ColorApi {
 
@@ -8,7 +9,7 @@ class ColorApi {
         return axios.get("/colors", { headers }).then(res =>
             res.data
         ).catch(error => {
-            throw (error);
+            throw (errorAPIMessage(error));
         });
     }
 }

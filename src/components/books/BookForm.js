@@ -23,6 +23,7 @@ class BookForm extends React.Component {
 
     render() {
         const boxes = this.makeCheckBoxes();
+        const { errors, book } = this.props;
         return (
             <div>
                 <form>
@@ -30,90 +31,103 @@ class BookForm extends React.Component {
                         <TextInput
                             type="text"
                             name="title"
-                            label="title"
+                            label="Title"
                             styleClass="form-group col-md-6"
-                            value={this.props.book.title}
+                            error={errors.title}
+                            value={book.title}
                             onChange={this.props.onChange} />
 
                         <TextInput
                             type="text"
                             name="subtitle"
-                            label="subtitle"
+                            label="Subtitle"
                             styleClass="form-group col-md-6"
-                            value={this.props.book.subtitle}
+                            error={errors.subtitle}
+                            value={book.subtitle}
                             onChange={this.props.onChange} />
                     </div>
                     <div className="form-row">
                         <TextInput
                             type="text"
                             name="author"
-                            label="author"
+                            label="Author"
                             styleClass="form-group col-md-6"
-                            value={this.props.book.author}
+                            error={errors.author}
+                            value={book.author}
                             onChange={this.props.onChange} />
 
                         <TextInput
                             type="text"
                             name="published"
-                            label="published"
+                            label="Published"
                             styleClass="form-group col-md-6"
-                            value={this.props.book.published}
+                            error={errors.published}
+                            value={book.published}
                             onChange={this.props.onChange} />
                     </div>
                     <div className="form-row">
                         <TextInput
                             type="text"
                             name="publisher"
-                            label="publisher"
+                            label="Publisher"
                             styleClass="form-group col-md-6"
-                            value={this.props.book.publisher}
+                            error={errors.publisher}
+                            value={book.publisher}
                             onChange={this.props.onChange} />
 
                         <TextInput
                             type="text"
                             name="pages"
-                            label="pages"
+                            label="Pages"
                             styleClass="form-group col-md-6"
-                            value={this.props.book.pages}
+                            error={errors.pages}
+                            value={book.pages}
                             onChange={this.props.onChange} />
                     </div>
                     <div className="form-row">
                         <TextInput
                             type="text"
                             name="isbn"
-                            label="isbn"
+                            label="ISBN"
                             styleClass="form-group col-md-6"
-                            value={this.props.book.isbn}
+                            error={errors.isbn}
+                            value={book.isbn}
                             onChange={this.props.onChange} />
 
                         <TextInput
                             type="text"
                             name="cover"
-                            label="cover"
+                            label="Cover"
                             styleClass="form-group col-md-6"
-                            value={this.props.book.cover}
+                            error={errors.cover}
+                            value={book.cover}
                             onChange={this.props.onChange} />
                     </div>
                     <div className="form-row">
                         <TextInput
                             type="text"
                             name="website"
-                            label="website"
+                            label="Website"
                             styleClass="form-group col-md-6"
-                            value={this.props.book.website}
+                            error={errors.website}
+                            value={book.website}
                             onChange={this.props.onChange} />
 
                         <TextInput
                             type="text"
                             name="description"
-                            label="description"
+                            label="Description"
                             styleClass="form-group col-md-6"
+                            error={errors.description}
                             isTextArea
-                            value={this.props.book.description}
+                            value={book.description}
                             onChange={this.props.onChange} />
                     </div>
                     <div className="form-group">
                         {boxes}
+                        <br /><div className="invalid-feedback"
+                            style={{ display: errors.color_ids ? "inline" : "none" }}>
+                            {errors.color_ids}</div>
                     </div>
                     <button
                         type="submit"
@@ -128,6 +142,10 @@ class BookForm extends React.Component {
 
 BookForm.propTypes = {
     book: PropTypes.object.isRequired,
+    errors: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object
+    ]),
     colors: PropTypes.array.isRequired,
     onSave: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,

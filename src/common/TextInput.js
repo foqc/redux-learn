@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const TextInput = ({ name, label, onChange, placeholder, value, styleClass, isTextArea, type }) => {
+const TextInput = ({ name, label, onChange, placeholder, value, styleClass, isTextArea, type, error }) => {
     if (!isTextArea) {
         return (
             <div className={styleClass}>
@@ -9,10 +9,11 @@ const TextInput = ({ name, label, onChange, placeholder, value, styleClass, isTe
                 <input
                     type={type}
                     name={name}
-                    className="form-control"
+                    className={error ? "form-control is-invalid" : "form-control"}
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange} />
+                <div className="invalid-feedback">{error}</div>
             </div>
         );
     }
@@ -23,11 +24,12 @@ const TextInput = ({ name, label, onChange, placeholder, value, styleClass, isTe
                 <textarea
                     type={type}
                     name={name}
-                    className="form-control"
+                    className={error ? "form-control is-invalid" : "form-control"}
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange}
                     rows="3" />
+                <div className="invalid-feedback">{error}</div>
             </div>
         );
     }

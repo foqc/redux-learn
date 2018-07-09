@@ -5,9 +5,9 @@ import { bindActionCreators } from 'redux';
 import PropTypes from "prop-types";
 import ColorList from '../books/ColorList';
 import BookForm from '../books/BookForm';
+import Validator from 'validator';
 import * as bookActions from '../../actions/bookActions';
 import LoadErrorHandler from '../error/ErrorComponent';
-import { createErrorSelector, createLoadingSelector } from '../../actions/selectors';
 import isEmpty from '../../util/util';
 
 class BookPage extends React.Component {
@@ -18,7 +18,9 @@ class BookPage extends React.Component {
             saving: false,
             book: this.props.book,
             bookColors: this.props.bookColors,
-            checkBoxColors: this.props.checkBoxColors
+            checkBoxColors: this.props.checkBoxColors,
+            errors: {},
+            loading: false
         };
         this.toggleEdit = this.toggleEdit.bind(this);
         this.updateBookState = this.updateBookState.bind(this);
@@ -35,7 +37,7 @@ class BookPage extends React.Component {
             this.setState({ bookColors: nextProps.bookColors, checkBoxColors: nextProps.checkBoxColors });
         }
 
-        this.setState({ saving: false, isEditing: false });
+        this.setState({ saving: false, isEditing: false, loading: false });
     }
 
     toggleEdit() {
@@ -72,20 +74,45 @@ class BookPage extends React.Component {
 
     saveBook(event) {
         event.preventDefault();
-        this.props.actions.updateBook(this.state.book);
+        const errors = this.validate(this.state.book);
+        this.setState({ errors });
+        if (Object.keys(errors).length === 0) {
+            this.setState({ loading: true });
+            this.props.actions.updateBook(this.state.book)
+                .catch(err =>
+                    this.setState({ errors: err, loading: false })
+                );
+        }
     }
+
+    validate = data => {
+        const errors = {};
+        if (!Validator.isISBN(data.isbn)) errors.isbn = "Invalid ISBN";
+        if (!data.title && data.title.length < 5) errors.title = "Title must have at least 5 characters";
+        if (!data.subtitle && data.subtitle.length < 5) errors.subtitle = "Subtitle must have at least 5 characters";
+        if (!data.author && data.author.length < 3) errors.author = "Author must have at least 3 characters";
+        if (!Validator.isBefore(data.published)) errors.published = "Published must be a valid date";
+        if (!data.publisher && data.publisher < 5) errors.publisher = "Publisher must have at least 5 characters";
+        if (!Validator.isInt(data.pages.toString())) errors.pages = "Pages must be a valid number";
+        if (!data.description && data.description < 4) errors.description = "Description must have at least 4 characters";
+        if (!Validator.isURL(data.website)) errors.website = "Insert a valid website";
+        if (!Validator.isURL(data.cover)) errors.cover = "Insert a valid image url";
+        if (data.color_ids.length == 0) errors.color_ids = "Choose at least 1 book's color";
+        return errors;
+    };
 
     deleteBook(event) {
-        this.props.actions.deleteBook(this.state.book);
+        this.props.actions.deleteBook(this.state.book).catch(err =>
+            this.setState({ errors: err, loading: false })
+        );
     }
 
-
     render() {
-        //console.log(this.state.book)
-        if (!this.state.book._id) {
+        const { errors, loading, book } = this.state;
+        if (!book._id) {
             return (
                 <div className="col-md-8">
-                    <LoadErrorHandler showError={this.props.error} loading={this.props.loading}>
+                    <LoadErrorHandler showError={errors.global} loading={loading}>
                         <div className="alert alert-info" role="alert">
                             There is not a book with this ID!
                         </div>
@@ -99,13 +126,16 @@ class BookPage extends React.Component {
                     <div className="row" >
                         <div className="col-md-12">
                             <h3>Edit</h3>
-                            <BookForm
-                                book={this.state.book}
-                                colors={this.state.checkBoxColors}
-                                onSave={this.saveBook}
-                                onChange={this.updateBookState}
-                                onColorChange={this.updateBookColors}
-                                saving={this.state.saving} />
+                            <LoadErrorHandler showError={errors.global} loading={loading}>
+                                <BookForm
+                                    errors={errors}
+                                    book={book}
+                                    colors={this.state.checkBoxColors}
+                                    onSave={this.saveBook}
+                                    onChange={this.updateBookState}
+                                    onColorChange={this.updateBookColors}
+                                    saving={this.state.saving} />
+                            </LoadErrorHandler>
                         </div>
                     </div>
                 </div>
@@ -113,14 +143,14 @@ class BookPage extends React.Component {
         }
         return (
             <div className="col-md-8 col-md-offset-2">
-                <LoadErrorHandler showError={this.props.error} loading={this.props.loading}>
+                <LoadErrorHandler showError={errors.global} loading={loading}>
                     <div className="row" >
                         <div className="col-md-8">
                             <h3>Details</h3>
-                            <h5>{this.props.book.title}</h5>
-                            <p>Subtitle: {this.props.book.subtitle}</p>
-                            <p>Author: {this.props.book.author}</p>
-                            <p>Published: {this.props.book.published}</p>
+                            <h5>{book.title}</h5>
+                            <p>Subtitle: {book.subtitle}</p>
+                            <p>Author: {book.author}</p>
+                            <p>Published: {book.published}</p>
                             <div className="txtn">
                                 <ColorList colors={this.props.bookColors} />
                             </div>
@@ -128,8 +158,8 @@ class BookPage extends React.Component {
                             <button className="btn btn-danger" onClick={this.deleteBook}>Delete</button>
                         </div>
                         <div className="col-md-4"><div className="text-center">
-                            <img src={this.props.book.cover} className="rounded"
-                                alt={this.props.book.subtitle} width="200" height="300" />
+                            <img src={book.cover} className="rounded"
+                                alt={book.subtitle} width="200" height="300" />
                         </div>
                         </div>
                     </div>
@@ -143,12 +173,7 @@ BookPage.propTypes = {
     book: PropTypes.object.isRequired,
     bookColors: PropTypes.array.isRequired,
     checkBoxColors: PropTypes.array.isRequired,
-    actions: PropTypes.object.isRequired,
-    loading: PropTypes.bool.isRequired,
-    error: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.object
-    ])
+    actions: PropTypes.object.isRequired
 };
 
 function colorsForCheckBoxes(colors, book = null) {
@@ -179,9 +204,6 @@ function getBookById(books, id) {
     return book;
 }
 
-const errorSelector = createErrorSelector(['LOAD_BOOKS', 'LOAD_COLORS']);
-const loadingSelector = createLoadingSelector(['LOAD_BOOKS', 'LOAD_COLORS']);
-
 function mapStateToProps(state, ownProps) {
     let book = {
         isbn: '', title: '', subtitle: '', author: '', published: '',
@@ -204,9 +226,7 @@ function mapStateToProps(state, ownProps) {
         }
     }
     return {
-        book: book, checkBoxColors: checkBoxColors, bookColors: bookColors,
-        error: errorSelector(state),
-        loading: loadingSelector(state)
+        book: book, checkBoxColors: checkBoxColors, bookColors: bookColors
     };
 }
 

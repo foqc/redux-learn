@@ -5,8 +5,6 @@ import { Router, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import routes from './routes';
 import registerServiceWorker from './registerServiceWorker';
-import { loadBooks } from '../src/actions/bookActions';
-import { loadColors } from '../src/actions/colorActions';
 import history from "./history";
 
 const store = configureStore();

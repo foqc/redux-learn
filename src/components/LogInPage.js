@@ -13,7 +13,7 @@ class LogInPage extends React.Component {
         this.state = {
             credentials: { email: 'foqc@email.com', password: 'mypassword' },
             errors: {},
-            loading:false
+            loading: false
         };
         this.onChange = this.onChange.bind(this);
         this.onSave = this.onSave.bind(this);
@@ -32,7 +32,7 @@ class LogInPage extends React.Component {
             this.setState({ loading: true });
             this.props.actions.loginUser(this.state.credentials)
                 .catch(err =>
-                    this.setState({ errors: err.response.data.errors, loading: false })
+                    this.setState({ errors: err, loading: false })
                 );
         }
     }
@@ -45,21 +45,19 @@ class LogInPage extends React.Component {
     };
 
     render() {
-        const { errors, loading } = this.state;
+        const { errors, loading, credentials } = this.state;
         return (
             <div className="">
                 <div className="row" >
                     <div className="col-md-4" style={{ margin: "0 auto" }}>
-                        <LoadErrorHandler showError={errors} loading={loading}>
+                        <LoadErrorHandler showError={errors.global} loading={loading}>
                             <form>
-                                {errors.global && (
-                                    <div className="alert alert-danger">{errors.global}</div>
-                                )}
                                 <TextInput
                                     name="email"
-                                    label="email"
-                                    value={this.state.credentials.email}
+                                    label="Email"
+                                    value={credentials.email}
                                     styleClass="form-group"
+                                    error={errors.email}
                                     onChange={this.onChange} />
 
                                 <TextInput
@@ -67,7 +65,8 @@ class LogInPage extends React.Component {
                                     label="password"
                                     type="password"
                                     styleClass="form-group"
-                                    value={this.state.credentials.password}
+                                    error={errors.password}
+                                    value={credentials.password}
                                     onChange={this.onChange} />
 
                                 <input
