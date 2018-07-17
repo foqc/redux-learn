@@ -4,6 +4,8 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as sessionActions from '../actions/sessionActions';
+import ToggleButton from '../common/DrawerToggleButton';
+import '../header.css';
 
 class Header extends React.Component {
   constructor(props) {
@@ -19,23 +21,37 @@ class Header extends React.Component {
   render() {
     if (this.props.logged_in) {
       return (
-        <nav>
-          <NavLink to="/home" activeClassName="active">Home</NavLink>
-          {" | "}
-          <NavLink to="/books" activeClassName="active">Books</NavLink>
-          {" | "}
-          <a href="/logout" onClick={this.logOut}>Log out</a>
-        </nav>
+        <header className="toolbar">
+          <nav className="toolbar_navigation">
+            <div><ToggleButton /></div>
+            <div className="toolbar_logo"><NavLink to="/home" activeClassName="active">REDUX LEARN</NavLink></div>
+            <div className="spacer" />
+            <div className="toolbar_navigation_items">
+              <ul>
+                <li><NavLink to="/home" activeClassName="active">Home</NavLink></li>
+                <li><NavLink to="/books" activeClassName="active">Books</NavLink></li>
+                <li><a href="/logout" onClick={this.logOut}>Log out</a></li>
+              </ul>
+            </div>
+          </nav>
+        </header>
       );
     } else {
       return (
-        <nav>
-          <NavLink to="/home" activeClassName="active">Home</NavLink>
-          {" | "}
-          <NavLink to="/books" activeClassName="active">Books</NavLink>
-          {" | "}
-          <NavLink to="/login" activeClassName="active">Log in</NavLink>
-        </nav>
+        <header className="toolbar">
+          <nav className="toolbar_navigation">
+            <div><ToggleButton /></div>
+            <div className="toolbar_logo"><NavLink to="/home" activeClassName="active">REDUX LEARN</NavLink></div>
+            <div className="spacer" />
+            <div className="toolbar_navigation_items">
+              <ul>
+                <li><NavLink to="/home" activeClassName="active">Home</NavLink></li>
+                <li><NavLink to="/books" activeClassName="active">Books</NavLink></li>
+                <li><NavLink to="/login" activeClassName="active">Log in</NavLink></li>
+              </ul>
+            </div>
+          </nav>
+        </header>
       );
     }
   }

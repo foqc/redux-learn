@@ -9,13 +9,15 @@ import LogInPage from '../../src/components/LogInPage';
 class App extends React.Component {
   render() {
     return (
-      <div className="container-fluid">
+      <div className="App">
         <Header />
-        <Switch>
-          <Route path="/home" component={HomePage} />
-          <UserRoute path="/books" component={BooksPage} />
-          <Route path="/login" component={LogInPage} />
-        </Switch>
+        <div className="container-fluid" style={{ marginTop: '64px' }}>
+          <Switch>
+            <Route path="/home" component={HomePage} />
+            <UserRoute path="/books" component={BooksPage} />
+            <Route path="/login" component={LogInPage} />
+          </Switch>
+        </div>
       </div>
     );
   }
