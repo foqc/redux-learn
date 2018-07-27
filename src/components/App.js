@@ -10,10 +10,10 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Header />
+        <Switch><Header /></Switch>
         <div className="container-fluid" style={{ marginTop: '64px' }}>
           <Switch>
-            <Route path="/home" component={HomePage} />
+            <Route exact path="/" component={HomePage} />
             <UserRoute path="/books" component={BooksPage} />
             <Route path="/login" component={LogInPage} />
           </Switch>

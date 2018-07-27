@@ -3,14 +3,20 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 
-const UserRoute = ({ isAuthenticated, component: Component, ...rest }) => (
-    <Route
-        {...rest}
-        render={props =>
-            isAuthenticated ? (<Component {...props} />) : (<Redirect to="/login" />)
-        }
-    />
-);
+const UserRoute = ({ isAuthenticated, component: Component, ...rest }) => {
+    return (
+        <Route
+            {...rest}
+            render={props =>
+                isAuthenticated ? (<Component {...props} />) : (<Redirect
+                    to={{
+                        pathname: "/login",
+                        state: { from: props.location }
+                    }}
+                />)
+            }
+        />);
+};
 
 UserRoute.propTypes = {
     component: PropTypes.func.isRequired,
