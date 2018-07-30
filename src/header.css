@@ -1,3 +1,7 @@
+.bg-custom {
+    background-color: #009688!important;
+}
+
 .toolbar{
     position: fixed;
     width: 100%;

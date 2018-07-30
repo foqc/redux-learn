@@ -14,8 +14,7 @@ class LogInPage extends React.Component {
         this.state = {
             credentials: { email: 'foqc@email.com', password: 'mypassword' },
             errors: {},
-            loading: false,
-            redirectToReferrer: false
+            loading: false
         };
         this.onChange = this.onChange.bind(this);
         this.onSave = this.onSave.bind(this);
@@ -33,9 +32,8 @@ class LogInPage extends React.Component {
         if (Object.keys(errors).length === 0) {
             this.setState({ loading: true });
             this.props.actions.loginUser(this.state.credentials)
-                .then(() => this.setState({ redirectToReferrer: true }))
                 .catch(err =>
-                    this.setState({ errors: err, loading: false, redirectToReferrer: false })
+                    this.setState({ errors: err, loading: false })
                 );
         }
     }
@@ -48,44 +46,37 @@ class LogInPage extends React.Component {
     };
 
     render() {
-        const { errors, loading, credentials, redirectToReferrer } = this.state;
-        const { from } = this.props.location.state || { from: { pathname: "/" } };
-
-        if (redirectToReferrer) {
-            return <Redirect to={from} />;
-        }
+        const { errors, loading, credentials } = this.state;
 
         return (
-            <div className="">
-                <div className="row" >
-                    <div className="col-md-4" style={{ margin: "0 auto" }}>
-                        <LoadErrorHandler showError={errors.global} loading={loading}>
-                            <form>
-                                <TextInput
-                                    name="email"
-                                    label="Email"
-                                    value={credentials.email}
-                                    styleClass="form-group"
-                                    error={errors.email}
-                                    onChange={this.onChange} />
+            <div className="row" >
+                <div className="col-md-4" style={{ margin: "0 auto" }}>
+                    <LoadErrorHandler showError={errors.global} loading={loading}>
+                        <form>
+                            <TextInput
+                                name="email"
+                                label="Email"
+                                value={credentials.email}
+                                styleClass="form-group"
+                                error={errors.email}
+                                onChange={this.onChange} />
 
-                                <TextInput
-                                    name="password"
-                                    label="password"
-                                    type="password"
-                                    styleClass="form-group"
-                                    error={errors.password}
-                                    value={credentials.password}
-                                    onChange={this.onChange} />
+                            <TextInput
+                                name="password"
+                                label="password"
+                                type="password"
+                                styleClass="form-group"
+                                error={errors.password}
+                                value={credentials.password}
+                                onChange={this.onChange} />
 
-                                <input
-                                    type="submit"
-                                    className="btn btn-primary"
-                                    onClick={this.onSave} />
-                                {" "}
-                            </form>
-                        </LoadErrorHandler>
-                    </div>
+                            <input
+                                type="submit"
+                                className="btn btn-primary"
+                                onClick={this.onSave} />
+                            {" "}
+                        </form>
+                    </LoadErrorHandler>
                 </div>
             </div>
         );
