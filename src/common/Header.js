@@ -46,7 +46,7 @@ class Header extends React.Component {
         <Fragment>
           <nav className="navbar navbar-expand-lg navbar-dark bg-custom fixed-top">
             <NavbarToggler className="mytoggler" onClick={this.onClickSideBar} />
-            <NavLink to="/" className="navbar-brand" >REDUX LEARN</NavLink>
+            <NavLink to="/" className="navbar-brand" >LEARN REDUX</NavLink>
             <NavbarToggler className="mytoggler2" onClick={this.onClickHandle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <div className="mr-auto">{}</div>
@@ -64,7 +64,7 @@ class Header extends React.Component {
     } else {
       return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-          <NavLink to="/" className="navbar-brand" >REDUX LEARN</NavLink>
+          <NavLink to="/" className="navbar-brand" >LEARN REDUX</NavLink>
           <NavbarToggler onClick={this.onClickHandle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <div className="mr-auto">{}</div>

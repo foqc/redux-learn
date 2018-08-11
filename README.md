@@ -1,4 +1,4 @@
-# Redux Learn
+# Learn Redux
 
 It is a React Redux application that consumes data from the BookAPI made on NodeJS. Users can log in, create, edit, delete and view books and their associated colors. 
 

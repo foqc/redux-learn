@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
 import MenuLinkSB from '../common/MenuLinkSB';
 import img1 from '../assets/images/user.png';
 import '../assets/css/admin-theme.css';
