@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from "prop-types";
 import { ClipLoader } from 'react-spinners';
 
 function withErrorHandling(WrappedComponent) {

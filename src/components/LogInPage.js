@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from "react-router-dom";
 import TextInput from '../common/TextInput';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';

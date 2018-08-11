@@ -8,7 +8,7 @@ const LoginRoute = ({ isAuthenticated, component: Component, ...rest }) => {
         <Route
             {...rest}
             render={props =>
-                (isAuthenticated && { ...rest }.path === "/login") ? (<Redirect to="/" />) : (<Component {...props} />)
+                (isAuthenticated && { ...rest }.path === "/login") ? (<Redirect to="/dashboard" />) : (<Component {...props} />)
             }
         />);
 };
@@ -20,7 +20,7 @@ LoginRoute.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        isAuthenticated: !!state.session
+        isAuthenticated: !!state.user.session
     };
 }
 

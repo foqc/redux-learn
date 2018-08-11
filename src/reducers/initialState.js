@@ -1,5 +1,5 @@
 export default {
+    user: { session: false, loaded: false },
     books: [],
-    colors: [],
-    session: !!sessionStorage.jwt
+    colors: []
 };

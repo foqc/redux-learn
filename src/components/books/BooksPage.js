@@ -8,6 +8,7 @@ import NewBookPage from '../books/NewBookPage';
 import { createErrorSelector, createLoadingSelector } from '../../actions/selectors';
 import { loadBooks } from '../../actions/bookActions';
 import { loadColors } from '../../actions/colorActions';
+import Container from '../../common/Container';
 
 class BooksPage extends React.Component {
   componentDidMount() {
@@ -17,19 +18,21 @@ class BooksPage extends React.Component {
   render() {
     const { books, match, error, loading } = this.props;
     return (
-      <div className="row">
-        <div className="col-md-4">
-          <h1>
-            Books
+      <Container mainHeader="BOOKS" secondHeader="LIST OF BOOK" infoHeader="My Books">
+        <div className="row">
+          <div className="col-md-4">
+            <h1>
+              Books
             <NavLink to={`${match.url}/new`} className="btn btn-primary"> + Book </NavLink>
-          </h1>
-          <BookList books={books} match={match} error={error} loading={loading} />
+            </h1>
+            <BookList books={books} match={match} error={error} loading={loading} />
+          </div>
+          <Switch>
+            <Route path={`${match.path}/new`} component={NewBookPage} />
+            <Route path={`${match.path}/:id`} component={BookPage} />
+          </Switch>
         </div>
-        <Switch>
-          <Route path={`${match.path}/new`} component={NewBookPage} />
-          <Route path={`${match.path}/:id`} component={BookPage} />
-        </Switch>
-      </div>
+      </Container>
     );
   }
 }
